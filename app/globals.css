@@ -1,7 +1,4 @@
 @import url('https://unpkg.com/flowbite@1.4.1/dist/flowbite.min.css');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 
 :root {
