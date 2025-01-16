@@ -25,34 +25,34 @@ function JobTable() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleFileChange = (event: any) => {
-    const file = event.target.files[0];
-
-    if (file) {
-      setIsLoading(true);
-      setError(""); // Clear any previous errors
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = e.target?.result;
-
-        try {
-          const workbook = XLSX.read(data, { type: 'binary', cellText: false, cellDates: true });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet) as Jobsexcel[];
-          console.log(jsonData)
-          setData(jsonData);
-        } catch (error) {
-          console.error('Error reading Excel file:', error);
-          setError('Error reading Excel file. Please check the file format.');
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      reader.readAsBinaryString(file);
-    }
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+  
+    if (!file) return; // Handle case where no file is selected
+  
+    setIsLoading(true);
+    setError(""); // Clear any previous errors
+  
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const data = e.target?.result;
+  
+      try {
+        const workbook = XLSX.read(data, { type: 'binary', cellText: false, cellDates: true });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet) as Jobsexcel[];
+        console.log(jsonData);
+        setData(jsonData);
+      } catch (error) {
+        console.error('Error reading Excel file:', error);
+        setError('Error reading Excel file. Please check the file format.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    reader.readAsBinaryString(file);
   };
 
   // Handle potential errors during data fetching (optional)
