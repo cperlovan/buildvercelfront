@@ -30,6 +30,7 @@ function JobTable() {
   const [data, setData] = useState<Jobsexcel[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -48,6 +49,7 @@ function JobTable() {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet) as Jobsexcel[];
+        
         setData(jsonData);
       } catch (error) {
         console.error('Error reading Excel file:', error);
