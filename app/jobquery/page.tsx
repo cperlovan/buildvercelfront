@@ -1,4 +1,4 @@
-"use client"; // Assuming this is for React Server Components
+"use client"; 
 
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
@@ -13,7 +13,7 @@ interface Jobsexcel {
   Name: string;
   AmountInvoiced: number;
   PaymentsReceived: number;
-  ProjStart: Date; // Assuming ProjStart is a date
+  ProjStart: Date; 
   ActualCompletion: Date;
   ActualStart: Date;
   ProjCompletion: Date;
@@ -66,14 +66,14 @@ export default function Page() {
     <div>
       <div>
   {/* Mostrar el ID del trabajo seleccionado */}
-  {selectedJob && <p>ID del trabajo: {selectedJob.id}</p>}
+  {selectedJob && <p>ID job: {selectedJob.id}</p>}
 </div>
       <div>
         <Header />
       </div>
       <hr />
       <select onChange={handleJobSelect}>
-        <option value="">Selecciona un trabajo</option>
+        <option value="">Choose a job</option>
         {jobs.map((job) => (
           <option key={job.Name} value={job.Name}>
             {job.Name}
