@@ -1,11 +1,10 @@
 "use client";
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
-import React from 'react'
-//
-
+//import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import "../../app/globals.css"
 import "../../public/assets/css/style.css"
+
+import React from 'react'
+
 
 
 function Header() {
