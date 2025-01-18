@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function ProgressBar({ totalCost, jobRunningTotal }) {
+interface ProgressBarProps {
+  totalCost: number; // or number | bigint
+  jobRunningTotal: number;
+}
+
+function ProgressBar({ totalCost, jobRunningTotal }: ProgressBarProps) {
   const [progress, setProgress] = useState(0);
 
-  const formatNumber = (number:  number | bigint)=>{
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number)
-}
+  const formatNumber = (number: number | bigint) => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number);
+  };
 
   // Calcula el porcentaje de progreso al cargar el componente
   useEffect(() => {
-    const calculatedProgress = (totalCost / jobRunningTotal) * 100;
+    const calculatedProgress = totalCost > 0 ? (totalCost / jobRunningTotal) * 100 : 0;
     
     setProgress(calculatedProgress);
   }, [totalCost, jobRunningTotal]);
@@ -29,8 +34,7 @@ function ProgressBar({ totalCost, jobRunningTotal }) {
           role="progressbar"
           style={{ width: `${progress}%` }}
           aria-valuenow={progress}
-          aria-valuemin="0"
-          aria-valuemax="100"
+         
         >
           {formatNumber(progress)}% executed
         </div>
