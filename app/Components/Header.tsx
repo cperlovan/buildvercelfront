@@ -3,10 +3,10 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import React from 'react'
 //
-import Image from 'next/image'
+
 import "../../app/globals.css"
 import "../../public/assets/css/style.css"
-import logo from "../../public/assets/image/Construction.png"
+
 
 function Header() {
 

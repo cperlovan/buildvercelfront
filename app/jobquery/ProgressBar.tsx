@@ -10,7 +10,7 @@ function ProgressBar({ totalCost, jobRunningTotal }) {
 
   // Calcula el porcentaje de progreso al cargar el componente
   useEffect(() => {
-    let calculatedProgress = (totalCost / jobRunningTotal) * 100;
+    const calculatedProgress = (totalCost / jobRunningTotal) * 100;
     
     setProgress(calculatedProgress);
   }, [totalCost, jobRunningTotal]);
