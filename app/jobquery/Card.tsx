@@ -73,14 +73,14 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const response = await fetch('http://localhost:3001/bills');
+                const response = await fetch('https://constructapi.vercel.app/bills');
                 const databills = await response.json();
                 setBi(databills);
             } catch (error) {
                 console.error('Error al obtener los bills:', error);
             }
             try {
-                const response = await fetch('http://localhost:3001/po');
+                const response = await fetch('https://constructapi.vercel.app/po');
                 const datapo = await response.json();
                 setPo(datapo);
             } catch (error) {

@@ -154,7 +154,7 @@ function Page() {
      
     // Send the data to your backend using fetch or any other HTTP library
     deleteTableData()
-    fetch('http://localhost:3001/bills', {
+    fetch('https://constructapi.vercel.app/bills', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: jobsData,
@@ -184,7 +184,7 @@ function Page() {
 
   async function deleteTableData() {
     try {
-      const response = await fetch('http://localhost:3001/bills/delete', {
+      const response = await fetch('https://constructapi.vercel.app/bills/delete', {
         method: 'PUT',
       });
   
