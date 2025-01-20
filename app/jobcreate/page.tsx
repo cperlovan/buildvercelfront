@@ -85,6 +85,7 @@ function JobTable() {
     const jobsData = JSON.stringify(data);
      
     // Send the data to your backend using fetch or any other HTTP library
+        setIsLoading(true);
     deleteTableData()
     fetch('https://constructapi.vercel.app/jobs', {
       method: 'POST',
@@ -93,6 +94,7 @@ function JobTable() {
     })
       .then((response) => {
         if (response.ok) {
+          setIsLoading(false);
           Swal.fire({
             title: '¡Congratulation!',
             text: `${data.length} records have been sent to the database.`,
@@ -101,12 +103,14 @@ function JobTable() {
           setData([]);
           setError('');
         } else {
+          setIsLoading(false);
           console.error('Error sending jobs data:', response.statusText);
           // Handle errors from the backend (optional)
           setError('An error occurred while saving jobs. Please try again.');
         }
       })
       .catch((error) => {
+        setIsLoading(false);
         console.error('Error sending jobs data:', error);
         // Handle network errors (optional)
         setError('An error occurred while communicating with the server. Please check your internet connection and try again.');
@@ -147,7 +151,7 @@ function JobTable() {
       {isLoading && <p>Loading data...</p>}
       {error && <p className="error">{error}</p>}
       <form className="form-control" onSubmit={handleSubmit} >
-        <button className="btn btn-secondary"  style={{fontSize: 'small', marginLeft:'5px'}} >Save jobs to database</button>
+        <button className="btn btn-secondary"  disabled={isLoading} style={{fontSize: 'small', marginLeft:'5px'}} >Save jobs to database</button>
       {!isLoading && data.length > 0 && (
         <table id="Datatable" className="table table-hover fs-6 table-striped mt-3">
           <thead>
