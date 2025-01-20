@@ -1,7 +1,11 @@
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+import Header from "./Components/Header";
 export default function Home() {
   return (
     <>
-    <h1>PROYECTO BUILD</h1>
+    <Header/>
+    <h1>PROJECT BUILD</h1>
     </>
   );
 }
