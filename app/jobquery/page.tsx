@@ -72,7 +72,7 @@ export default function Page() {
         <Header />
       </div>
       <hr />
-      <select onChange={handleJobSelect}>
+      <select onChange={handleJobSelect} className='jobselect'>
         <option value="">Choose a job</option>
         {jobs.map((job) => (
           <option key={job.Name} value={job.Name}>
