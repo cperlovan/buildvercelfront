@@ -93,7 +93,8 @@ function Page() {
     const jobsData = JSON.stringify(data);
 
     
-     
+    setIsLoading(true);
+
     // Send the data to your backend using fetch or any other HTTP library
     deleteTableData()
     fetch('https://constructapi.vercel.app/po', {
@@ -103,6 +104,7 @@ function Page() {
     })
       .then((response) => {
         if (response.ok) {
+          setIsLoading(false);
           Swal.fire({
             title: '¡Congratulation!',
             text: `${data.length} records have been sent to the database.`,
@@ -111,12 +113,14 @@ function Page() {
           setData([]);
           setError('');
         } else {
+          setIsLoading(false);
           console.error('Error sending PO data:', response.statusText);
           // Handle errors from the backend (optional)
           setError('An error occurred while saving jobs. Please try again.');
         }
       })
       .catch((error) => {
+        setIsLoading(false);
         console.error('Error sending PO data:', error);
         // Handle network errors (optional)
         setError('An error occurred while communicating with the server. Please check your internet connection and try again.');
@@ -158,7 +162,7 @@ function Page() {
       {isLoading && <p>Loading data...</p>}
       {error && <p className="error">{error}</p>}
       <form className="form-control" onSubmit={handleSubmit} >
-        <button className="btn btn-secondary"  style={{fontSize: 'small', marginLeft:'5px'}} >Save PO to database</button>
+        <button className="btn btn-secondary" disabled={isLoading} style={{fontSize: 'small', marginLeft:'5px'}} >Save PO to database</button>
       {!isLoading && data.length > 0 && (
         <table id="Datatable" className="table table-hover fs-6 table-striped mt-3">
           <thead>

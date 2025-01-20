@@ -66,7 +66,7 @@ export default function Page() {
     <div>
       <div>
   {/* Mostrar el ID del trabajo seleccionado */}
-  {selectedJob && <p>ID job: {selectedJob.id}</p>}
+ 
 </div>
       <div>
         <Header />

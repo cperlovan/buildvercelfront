@@ -97,39 +97,7 @@ function Page() {
       console.error('No data to submit. Please upload an Excel file.');
       return;
     }
-    // Format InvoiceDate before sending data
-    // Format all date fields before sending data
-    // const formattedData = data.map((row) => ({
-    //   ...row,
-    //   InvoiceDate: row.InvoiceDate ? new Date(row.InvoiceDate) : null, 
-    //   CreatedDate: row.CreatedDate ? new Date(row.CreatedDate) : null,
-    //   DatePaid: row.DatePaid ? new Date(row.DatePaid) : null,
-    //   DueDate: row.DueDate ? new Date(row.DueDate) : null,
-    // }));
-    // const formattedData = data.map((row) => ({
-    //   ...row,
-    //   InvoiceDate: moment(row.InvoiceDate, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    //   DueDate: moment(row.DueDate, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    //   DatePaid: moment(row.DatePaid, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    //   CreatedDate: moment(row.CreatedDate, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    // }));
-    // const formattedData = data.map((row) => {
-    //   let formattedInvoiceDate;
-    //   try {
-    //     formattedInvoiceDate = moment(row.InvoiceDate, 'MM/DD/YYYY').format('YYYY-MM-DD');
-    //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    //   } catch (error) {
-    //     console.error(`Error formatting InvoiceDate for row: ${JSON.stringify(row)}`);
-    //     // Handle the invalid date (e.g., skip the record, display an error message)
-    //   }
-    //   return {
-    //     ...row,
-    //     InvoiceDate: formattedInvoiceDate,
-    //     DueDate: moment(row.DueDate, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    //     DatePaid: moment(row.DatePaid, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    //     CreatedDate: moment(row.CreatedDate, 'MM/DD/YYYY').format('YYYY-MM-DD'),
-    //   };
-    // });
+    
     const formattedData = data.map((row) => ({
       ...row,
       InvoiceDate: moment(row.InvoiceDate, 'MM/DD/YYYY', true).isValid() ?
@@ -150,7 +118,7 @@ function Page() {
     // Prepare the data to send (assuming your backend expects JSON)
     const jobsData = JSON.stringify(formattedData);
 
-    
+    setIsLoading(true);
      
     // Send the data to your backend using fetch or any other HTTP library
     deleteTableData()
@@ -161,6 +129,7 @@ function Page() {
     })
       .then((response) => {
         if (response.ok) {
+          setIsLoading(false);
           Swal.fire({
             title: '¡Congratulation!',
             text: `${data.length} records have been sent to the database.`,
@@ -169,12 +138,14 @@ function Page() {
           setData([]);
           setError('');
         } else {
+          setIsLoading(false);
           console.error('Error sending jobs data:', response.statusText);
           // Handle errors from the backend (optional)
           setError('An error occurred while saving jobs. Please try again.');
         }
       })
       .catch((error) => {
+        setIsLoading(true);
         console.error('Error sending jobs data:', error);
         // Handle network errors (optional)
         setError('An error occurred while communicating with the server. Please check your internet connection and try again.');
@@ -216,7 +187,7 @@ function Page() {
       {isLoading && <p>Loading data...</p>}
       {error && <p className="error">{error}</p>}
       <form className="form-control" onSubmit={handleSubmit} >
-        <button className="btn btn-secondary"  style={{fontSize: 'small', marginLeft:'5px'}} >Save bills to database</button>
+        <button className="btn btn-secondary" disabled={isLoading} style={{fontSize: 'small', marginLeft:'5px'}} >Save bills to database</button>
       {!isLoading && data.length > 0 && (
         <table id="Datatable" className="table table-hover fs-6 table-striped mt-3">
           <thead>
