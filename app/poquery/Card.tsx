@@ -27,22 +27,22 @@ interface CardProps {
 const columns = [
 	{
 		name: 'Job',
-		selector: (row: { Job: any; }) => row.Job,
+		selector: (row: posexcel) => row.Job,
 		sortable: true,
 	},
 	{
 		name: 'P.O.',
-		selector: (row: { PO: any; }) => row.PO,
+		selector: (row: posexcel) =>  row.PO,
 		sortable: true,
 	},
 	{
 		name: 'Status',
-		selector: (row: { Paid: any; }) => row.Paid,
+		selector: (row: posexcel) =>  row.Paid,
 		sortable: true,
 	},
     {
 		name: 'Cost',
-		selector: (row: { Cost: any; }) => row.Cost,
+		selector: (row: posexcel) =>  row.Cost,
 		sortable: true,
         
 	},
