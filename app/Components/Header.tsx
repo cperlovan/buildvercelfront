@@ -34,6 +34,12 @@ function Header() {
                             <li className="nav-item">
                                 <a className="nav-link" href="/jobquery">Job query</a>
                             </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/poquery">P.O. query</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/billquery">Bill query</a>
+                            </li>
                             {/* <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Dropdown
