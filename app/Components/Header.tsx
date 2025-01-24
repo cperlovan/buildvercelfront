@@ -1,7 +1,6 @@
 "use client";
-import "../../app/globals.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { useEffect } from "react";
+import "../../app/globals.css"
 
 // import "../../public/assets/css/style.css"
 
@@ -10,10 +9,6 @@ import React from 'react'
 
 
 function Header() {
-
-    useEffect(() => {
-        require("bootstrap/dist/js/bootstrap.bundle.min.js");
-      }, []);
 
     return (
         <>
