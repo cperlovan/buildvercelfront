@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import DataTable from 'react-data-table-component';
+import DataTable, { TableColumn } from 'react-data-table-component';
 
 interface Billsexcel {
     Job: string;
@@ -27,36 +27,40 @@ interface CardProps {
     selectedBi: Billsexcel[] ;
 }
 
+// interface TableColumn<T> {
+//     name: string;
+//     selector: (row: T) => string | number | Date; // Define el tipo de retorno del selector
+//     sortable: boolean;
+//   }
 
 
-const columns = [
+const columns: TableColumn<Billsexcel>[] = [
 	{
 		name: 'Job',
-		selector: (row: { Job: any; }) => row.Job,
+		selector: (row: Billsexcel) => row.Job,
 		sortable: true,
 	},
 	{
 		name: 'Bill',
-		selector: (row: { Bill: any; }) => row.Bill,
+		selector: (row: Billsexcel) => row.Bill,
 		sortable: true,
 	},
 	{
 		name: 'Status',
-		selector: (row: { BillStatus: any; }) => row.BillStatus,
+		selector: (row: Billsexcel) => row.BillStatus,
 		sortable: true,
 	},
     {
 		name: 'Amount',
-		selector: (row: { BillAmount: any; }) => row.BillAmount,
+		selector: (row: Billsexcel) => row.BillAmount,
 		sortable: true,
         
 	},
     {
-		name: 'Date Paid',
-		selector: (row: { DatePaid: any; }) => row.DatePaid,
-		sortable: true,
-        
-	},
+        name: 'Date Paid',
+        selector: (row: Billsexcel) => row.DatePaid.toISOString(), 
+        sortable: true,
+      }
 ];
 const Card: React.FC<CardProps> = ({ selectedBi }) => {
     return (
