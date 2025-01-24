@@ -1,7 +1,7 @@
 "use client";
+import "../../app/globals.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import "../../app/globals.css"
 // import "../../public/assets/css/style.css"
 
 import React from 'react'
