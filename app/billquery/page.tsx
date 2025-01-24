@@ -38,7 +38,7 @@ export default function Page() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch('http://localhost:3001/bills');
+        const response = await fetch('https://constructapi.vercel.app/bills');
         const data = await response.json();
        
         // Handle potential errors in the fetched data
@@ -59,7 +59,7 @@ export default function Page() {
   useEffect(() => {
     const fetchPayto = async () => {
       try {
-        const response = await fetch('http://localhost:3001/payto');
+        const response = await fetch('https://constructapi.vercel.app/payto');
         const data = await response.json();
 
         // Handle potential errors in the fetched data
