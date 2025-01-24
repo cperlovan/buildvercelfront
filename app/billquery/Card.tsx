@@ -55,27 +55,6 @@ const columns: TableColumn<Billsexcel>[] = [
         selector: (row: Billsexcel) => row.BillAmount,
         sortable: true,
 
-    },
-    {
-        name: 'Date Paid',
-        selector: (row: Billsexcel) => {
-            if (row.DatePaid) {
-                const dateString = row.DatePaid.toString().trim(); // Trim the string before creating the Date object
-                const date = new Date(dateString);
-                if (isNaN(date)) {
-                    return "Invalid Date";
-                } else {
-                    return date.toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    });
-                }
-            } else {
-                return "";
-            }
-        },
-        sortable: true,
     }
 ];
 const Card: React.FC<CardProps> = ({ selectedBi }) => {
