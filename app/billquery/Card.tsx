@@ -1,4 +1,5 @@
 "use client";
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 import React from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
