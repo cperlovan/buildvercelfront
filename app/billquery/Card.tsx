@@ -24,7 +24,7 @@ interface Billsexcel {
 }
 
 interface CardProps {
-    selectedBi: Billsexcel[] ;
+    selectedBi: Billsexcel[];
 }
 
 // interface TableColumn<T> {
@@ -35,47 +35,63 @@ interface CardProps {
 
 
 const columns: TableColumn<Billsexcel>[] = [
-	{
-		name: 'Job',
-		selector: (row: Billsexcel) => row.Job,
-		sortable: true,
-	},
-	{
-		name: 'Bill',
-		selector: (row: Billsexcel) => row.Bill,
-		sortable: true,
-	},
-	{
-		name: 'Status',
-		selector: (row: Billsexcel) => row.BillStatus,
-		sortable: true,
-	},
     {
-		name: 'Amount',
-		selector: (row: Billsexcel) => row.BillAmount,
-		sortable: true,
-        
-	},
+        name: 'Job',
+        selector: (row: Billsexcel) => row.Job,
+        sortable: true,
+    },
+    {
+        name: 'Bill',
+        selector: (row: Billsexcel) => row.Bill,
+        sortable: true,
+    },
+    {
+        name: 'Status',
+        selector: (row: Billsexcel) => row.BillStatus,
+        sortable: true,
+    },
+    {
+        name: 'Amount',
+        selector: (row: Billsexcel) => row.BillAmount,
+        sortable: true,
+
+    },
     {
         name: 'Date Paid',
-        selector: (row: Billsexcel) => row.DatePaid.toISOString(), 
+        selector: (row: Billsexcel) => {
+            if (row.DatePaid) {
+                const dateString = row.DatePaid.toString().trim(); // Trim the string before creating the Date object
+                const date = new Date(dateString);
+                if (isNaN(date)) {
+                    return "Invalid Date";
+                } else {
+                    return date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+            } else {
+                return "";
+            }
+        },
         sortable: true,
-      }
+    }
 ];
 const Card: React.FC<CardProps> = ({ selectedBi }) => {
     return (
         <div className='container-fluid'>
 
-            
 
 
-            <DataTable 
-            
-            data={selectedBi}
-            columns={columns}
-            pagination
-            responsive={true}
-            
+
+            <DataTable
+
+                data={selectedBi}
+                columns={columns}
+                pagination
+                responsive={true}
+
             />
 
 
