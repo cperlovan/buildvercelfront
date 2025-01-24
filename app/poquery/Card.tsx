@@ -55,7 +55,7 @@ const Card: React.FC<CardProps> = ({ selectedPo }) => {
 
 
             <DataTable 
-            
+            title="Purchase order Report"
             data={selectedPo}
             columns={columns}
             pagination
