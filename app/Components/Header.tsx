@@ -7,7 +7,7 @@ function Header() {
     <>
       <nav className="bg-white-500 text-black p-4"> 
         <div className="container mx-auto flex space-between items-center"> 
-          <h1 className="text-2xl font-bold text-align: left">Construction Monitoring</h1>
+          <h1 className="text-2xl font-bold">Construction Monitoring</h1>
           <ul className="flex space-x-4">
             <li>
               <a href="/home" className="text-black hover:underline">Home</a>
