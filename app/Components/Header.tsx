@@ -10,25 +10,25 @@ function Header() {
           <h1 className="text-2xl font-bold">Construction Monitoring</h1>
           <ul className="flex space-x-4">
             <li>
-              <a href="/home" className="text-white hover:underline">Home</a>
+              <a href="/home" className="text-black hover:underline">Home</a>
             </li>
             <li>
-              <a href="/jobcreate" className="text-white hover:underline">Job create</a>
+              <a href="/jobcreate" className="text-black hover:underline">Job create</a>
             </li>
             <li>
-              <a href="/billcreate" className="text-white hover:underline">Bill create</a>
+              <a href="/billcreate" className="text-black hover:underline">Bill create</a>
             </li>
             <li>
-              <a href="/pocreate" className="text-white hover:underline">PO create</a>
+              <a href="/pocreate" className="text-black hover:underline">PO create</a>
             </li>
             <li>
-              <a href="/jobquery" className="text-white hover:underline">Job query</a>
+              <a href="/jobquery" className="text-black hover:underline">Job query</a>
             </li>
             <li>
-              <a href="/poquery" className="text-white hover:underline">P.O. query</a>
+              <a href="/poquery" className="text-black hover:underline">P.O. query</a>
             </li>
             <li>
-              <a href="/billquery" className="text-white hover:underline">Bill query</a>
+              <a href="/billquery" className="text-black hover:underline">Bill query</a>
             </li>
           </ul>
         </div>
