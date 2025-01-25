@@ -1,6 +1,6 @@
 "use client"
 
-import 'bootstrap/dist/css/bootstrap.min.css'
+
 import './stylebills.css'
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
