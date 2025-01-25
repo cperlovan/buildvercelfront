@@ -103,7 +103,7 @@ export default function Page() {
         <Header />
       </div>
       <hr />
-      <select onChange={handleBillSelect} className='jobselect'>
+      <select onChange={handleBillSelect} className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
         <option value="">choose a contractor</option>
         {pay.map((po) => (
           <option key={po.Name} value={po.Name}>
