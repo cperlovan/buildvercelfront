@@ -5,6 +5,7 @@ import "../../app/globals.css"
 // import "../../public/assets/css/style.css"
 
 import React from 'react'
+import { Nav } from 'react-bootstrap';
 
 
 
@@ -12,7 +13,7 @@ function Header() {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light ">
+            <Nav className="navbar navbar-expand-lg navbar-light bg-light ">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#">Construction Monitoring</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +63,7 @@ function Header() {
                         </form> */}
                     </div>
                 </div>
-            </nav>
+            </Nav>
             
         </>
     )
