@@ -1,6 +1,6 @@
 "use client"
 
-import 'bootstrap/dist/css/bootstrap.min.css'
+import "../../app/globals.css";
 import './stylejobquery.css'
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
