@@ -66,10 +66,6 @@ export default function Page() {
   return (
     <div>
       <div>
-  {/* Mostrar el ID del trabajo seleccionado */}
- 
-</div>
-      <div>
         <Header />
       </div>
       <hr />
