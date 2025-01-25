@@ -92,10 +92,6 @@ export default function Page() {
   return (
     <div className='w-full mx-auto px-4'>
       <div>
-  {/* Mostrar el ID del trabajo seleccionado */}
- 
-</div>
-      <div>
         <Header />
       </div>
       <hr />

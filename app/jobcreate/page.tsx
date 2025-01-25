@@ -135,8 +135,10 @@ function JobTable() {
   }
     
   return (
-    <div>
+    <div> 
+      <div>
       <Header />
+      </div>
       <div className="table-responsive">
       <div className='mb-3 ml-4' >
       <label htmlFor="formFile" className="form-label">Choose file</label> 
