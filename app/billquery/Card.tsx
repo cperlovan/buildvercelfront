@@ -1,4 +1,5 @@
 "use client";
+import "../../app/globals.css";
 
 import React from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
