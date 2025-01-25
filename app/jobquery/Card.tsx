@@ -1,6 +1,7 @@
 
 
 import React, { useEffect, useState } from 'react'
+import "../../app/globals.css";
 
 import './stylejobquery.css'
 import ProgressBar from "./ProgressBar"
