@@ -59,7 +59,7 @@ const columns: TableColumn<Billsexcel>[] = [
 ];
 const Card: React.FC<CardProps> = ({ selectedBi }) => {
     return (
-        <div className='container-fluid'>
+        <div className='w-full mx-auto px-4'>
 
 
 
