@@ -104,7 +104,7 @@ export default function Page() {
       </div>
       <hr />
       <select onChange={handleBillSelect} className='block mb-2 text-base font-medium text-gray-900 dark:text-white'>
-        <option value="">choose a contractor</option>
+        <option value="">Choose a vendor</option>
         {pay.map((po) => (
           <option key={po.Name} value={po.Name}>
             {po.Name}
