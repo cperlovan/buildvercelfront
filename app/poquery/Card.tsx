@@ -50,7 +50,7 @@ const columns = [
 ];
 const Card: React.FC<CardProps> = ({ selectedPo }) => {
     return (
-        <div className='container-fluid'>
+        <div className='w-full mx-auto px-4'>
 
             
 
