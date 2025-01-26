@@ -135,30 +135,27 @@ function JobTable() {
   }
 
   return (
-    <div className='w-full mx-auto px-4'>
-      <div>
+    <div w-full mx-auto px-4>
         <Header />
-      </div>
-      <div className="overflow-x-auto relative">
-        <div className='mb-4 ml-4' >
-          <label htmlFor="formFile" className="block text-sm font-medium text-gray-700">Choose file</label>
-          <input
-            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
-            type="file"
-            id="formFile"
-            onChange={handleFileChange}
-            style={{ display: 'block', fontSize: 'small' }}
-          />
-        </div>
+        <div className="table-responsive rounded-sm bg-gray-2">
+          <div className='mb-3 ' >
+          <label className="mb-3 block text-sm font-bold text-black dark:text-white ml-2"> Attach file</label>
+            <input
+              className='w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:px-5 file:py-3 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary'
+              type="file"
+              id="formFile"
+              onChange={handleFileChange}
+              style={{ display: 'block', fontSize: 'small' }}
+            />
+          </div>
         {isLoading && <p className="text-red-500">Loading data...</p>}
         {error && <p className="text-red-500">{error}</p>}
-        <form className="mt-3" onSubmit={handleSubmit} >
-          <button className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-white hover:bg-gray-700 disabled:opacity-50"
+        <form className="bg-gray-100 p-4 rounded-md shadow-sm mt-3" onSubmit={handleSubmit} >
+          <button className="flex w-full items-center text-white justify-start gap-3.5 rounded-lg border border-stroke bg-gray-800 p-4 hover:bg-gray-900 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50 "
            disabled={isLoading} 
-           style={{ fontSize: 'small', marginLeft: '5px' }} 
-           >Save jobs to database</button>
+           style={{ fontSize: 'small', marginLeft: '5px' }} >Save jobs to database</button>
           {!isLoading && data.length > 0 && (
-            <table id="Datatable" className="table-auto border-collapse border border-gray-200 rounded-lg mt-3 text-gray-500">
+            <table id="Datatable" className="table table-hover fs-6 table-striped mt-3">
               <thead>
                 <tr>
                   <th>Name</th>
