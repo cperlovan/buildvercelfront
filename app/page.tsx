@@ -13,8 +13,8 @@ export default function Home() {
           className="imacentral"
           src={center.src}
           alt="center"
-          height={600}
-          width={1700}
+          layout="fill"
+          objectFit="cover"
         />
       </div>
     </div>
