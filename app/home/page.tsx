@@ -14,7 +14,6 @@ export default function page() {
           src={center.src}
           alt="center"
           layout="fill"
-          objectFit="cover"
         />
       </div>
     </div>

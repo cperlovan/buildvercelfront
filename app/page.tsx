@@ -14,7 +14,6 @@ export default function Home() {
           src={center.src}
           alt="center"
           layout="fill"
-          objectFit="cover"
         />
       </div>
     </div>
