@@ -149,7 +149,7 @@ function Page() {
     <div className='w-full mx-auto px-4'>
       <Header />
       <div>
-        <div className="table-responsive">
+        <div className="table-responsive rounded-sm bg-gray-2">
           <div className='mb-3 ml-4' >
           <label className="mb-3 block text-sm font-medium text-black dark:text-white">Attach file</label>
             <input
@@ -163,7 +163,7 @@ function Page() {
           {isLoading && <p>Loading data...</p>}
           {error && <p className="error">{error}</p>}
           <form className="form-control" onSubmit={handleSubmit} >
-            <button className="btn btn-secondary" disabled={isLoading} style={{ fontSize: 'small', marginLeft: '5px' }} >Save PO to database</button>
+            <button className=" flex w-full justify-center rounded bg-secondary p-3 font-medium text-gray hover:bg-opacity-90" disabled={isLoading} style={{ fontSize: 'small', marginLeft: '5px' }} >Save PO to database</button>
             {!isLoading && data.length > 0 && (
               <table id="Datatable" className="table table-hover fs-6 table-striped mt-3">
                 <thead>
