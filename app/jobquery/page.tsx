@@ -4,6 +4,7 @@ import "../../app/globals.css";
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import Header from '../Components/Header';
+import Footer from "../Components/Footer";
 
 interface Jobsexcel {
   id:number;
@@ -78,6 +79,7 @@ export default function Page() {
       
       <hr />
       <Card selectedJob={selectedJob} />
+      <Footer />
     </div>
   );
 }

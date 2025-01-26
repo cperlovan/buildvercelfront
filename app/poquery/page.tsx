@@ -5,6 +5,7 @@ import "../../app/globals.css";
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import Header from '../Components/Header';
+import Footer from "../Components/Footer";
 
 interface posexcel {
   Job: string;
@@ -107,6 +108,7 @@ export default function Page() {
       
       <hr />
       <Card selectedPo ={selectedPo} />
+      <Footer />
     </div>
   );
 }

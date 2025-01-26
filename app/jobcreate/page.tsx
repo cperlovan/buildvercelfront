@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import Header from '../Components/Header';
 import Swal from 'sweetalert2';
+import Footer from "../Components/Footer";
 
 
 
@@ -201,6 +202,7 @@ function JobTable() {
         </div>
 
       </div>
+      <Footer />
     </div>
   );
 }
