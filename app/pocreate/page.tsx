@@ -146,7 +146,7 @@ function Page() {
   }
     
   return (
-    <div>
+    <div className='w-full mx-auto px-4'>
       <Header />
       <div className="table-responsive">
       <div className='mb-3 ml-4' >

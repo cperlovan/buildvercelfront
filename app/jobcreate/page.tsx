@@ -135,7 +135,7 @@ function JobTable() {
   }
 
   return (
-    <div>
+    <div className='w-full mx-auto px-4'>
       <div>
         <Header />
       </div>

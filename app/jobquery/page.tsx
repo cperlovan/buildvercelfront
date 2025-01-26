@@ -64,7 +64,7 @@ export default function Page() {
   };
 
   return (
-    <div>
+    <div className='w-full mx-auto px-4'>
       <Header />
       <hr />
       <select onChange={handleJobSelect} className='block mb-2 text-base font-medium text-gray-900 dark:text-white'>
