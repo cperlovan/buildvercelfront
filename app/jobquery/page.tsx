@@ -65,9 +65,7 @@ export default function Page() {
 
   return (
     <div>
-      <div>
-        <Header />
-      </div>
+      <Header />
       <hr />
       <select onChange={handleJobSelect} className='block mb-2 text-base font-medium text-gray-900 dark:text-white'>
         <option value="">Choose a job</option>
