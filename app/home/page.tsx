@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Header from "../Components/Header";
-import center from "../public/assets/image/construction.jpg"
+import center from "../../public/assets/image/construction.jpg"
 
 export default function page() {
   return (
