@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Header from "./Components/Header";
 import center from "../public/assets/image/construction.jpg"
+import Footer from "./Components/Footer";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
           width={1700}
         />
       </div>
+      <Footer />
     </div>
   );
 }
