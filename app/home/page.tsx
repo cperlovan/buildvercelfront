@@ -1,16 +1,22 @@
 "use client";
 
-import "../../app/globals.css";
-import React from 'react'
-import Header from '../Components/Header';
-
-
+import Image from "next/image";
+import Header from "../Components/Header";
+import center from "../public/assets/image/construction.jpg"
 
 export default function page() {
-    return (
-        <div>
-        <Header />
-         <h1>HOME</h1>
-           </div>
-    )
+  return (
+    <div>
+      <Header />
+      <div>
+        <Image
+          className="imacentral"
+          src={center.src}
+          alt="center"
+          height={600}
+          width={1700}
+        />
+      </div>
+    </div>
+  );
 }
