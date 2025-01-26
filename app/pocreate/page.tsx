@@ -163,7 +163,7 @@ function Page() {
           {isLoading && <p>Loading data...</p>}
           {error && <p className="error">{error}</p>}
           <form className="form-control" onSubmit={handleSubmit} >
-            <button className="flex w-full items-center justify-start gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50 " disabled={isLoading} style={{ fontSize: 'small', marginLeft: '5px' }} >Save PO to database</button>
+            <button className="flex w-full items-center justify-start gap-3.5 rounded-lg border border-stroke bg-gray-800 p-4 hover:bg-gray-900 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50 " disabled={isLoading} style={{ fontSize: 'small', marginLeft: '5px' }} >Save PO to database</button>
             {!isLoading && data.length > 0 && (
               <table id="Datatable" className="table table-hover fs-6 table-striped mt-3">
                 <thead>
