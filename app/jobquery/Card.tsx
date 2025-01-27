@@ -354,7 +354,7 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                                 <hr />
                                 {Object.keys(poxPerformedbyxJobNotFully).length > 0 && (
 
-                                <table className='table-auto border-collapse border border-gray-200 rounded-lg mt-3 text-gray-500'>
+                                <table className='table table-hover table-striped mt-3 text-black-50'>
                                     <thead>
                                         <tr>
                                             <th>Perfomed by </th>
