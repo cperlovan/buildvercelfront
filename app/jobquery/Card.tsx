@@ -105,12 +105,6 @@ interface billData {
     BillStatus: string;
 }
 
-interface ModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    poData: PoData[];
-}
-
 
 
 export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null }) {
