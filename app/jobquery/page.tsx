@@ -32,7 +32,7 @@ export default function Page() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch('http://localhost:3001/jobs');
+        const response = await fetch('https://constructapi.vercel.app/jobs');
         const data = await response.json();
 
         // Handle potential errors in the fetched data

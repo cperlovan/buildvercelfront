@@ -119,14 +119,14 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const response = await fetch('http://localhost:3001/bills');
+                const response = await fetch('https://constructapi.vercel.app/bills');
                 const databills = await response.json();
                 setBi(databills);
             } catch (error) {
                 console.error('Error al obtener los bills:', error);
             }
             try {
-                const response = await fetch('http://localhost:3001/po');
+                const response = await fetch('https://constructapi.vercel.app/po');
                 const datapo = await response.json();
                 setPo(datapo);
             } catch (error) {
@@ -172,7 +172,7 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
 
     const handleVendorClick = async (vendorData: { PerformedBy: string; Job: string; }) => {
         try {
-            const response = await fetch(`http://localhost:3001/po?PerformedBy=${encodeURIComponent(vendorData.PerformedBy)}&Job=${encodeURIComponent(vendorData.Job)}`);
+            const response = await fetch(`https://constructapi.vercel.app/po?PerformedBy=${encodeURIComponent(vendorData.PerformedBy)}&Job=${encodeURIComponent(vendorData.Job)}`);
             const newPoData = await response.json();
             setPoData(newPoData);
             setIsModalOpen(true);
@@ -183,7 +183,7 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
 
     const handlePayToClick = async (vendorData: { PayTo: string; Job: string; }) => {
         try {
-            const response = await fetch(`http://localhost:3001/bills?PayTo=${encodeURIComponent(vendorData.PayTo)}&Job=${encodeURIComponent(vendorData.Job)}`);
+            const response = await fetch(`https://constructapi.vercel.app/bills?PayTo=${encodeURIComponent(vendorData.PayTo)}&Job=${encodeURIComponent(vendorData.Job)}`);
             const newbillData = await response.json();
             setbillData(newbillData);
             setIsModalOpenb(true);
