@@ -233,6 +233,8 @@ table {
 }
 
 .modal-content {
+  max-height: 80vh; /* Ajusta el valor según tus necesidades */
+  overflow-y: auto;
   background-color: white;
   padding: 20px;
   border-radius: 5px;
