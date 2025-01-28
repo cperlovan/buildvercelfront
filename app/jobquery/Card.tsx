@@ -5,6 +5,9 @@ import "../../app/globals.css";
 
 import './stylejobquery.css'
 import ProgressBar from "./ProgressBar"
+import Modalpo from './Modalpo'
+import Modalbill from './Modalbill';
+
 
 
 
@@ -62,28 +65,74 @@ interface posexcel {
 
 }
 
+interface PoData {
+    id: number;
+    title: string;
+    // Add other properties as needed based on your API response
+    performedBy: string;
+    job: string;
+    // ...
+}
+
 interface PayToResult {
     [key: string]: {
         [key: string]: number;
     };
 }
 
+interface PayToResult2 {
+    [key: string]: {
+        Jobs: string[];
+        TotalCost: number;
+        PaidAmount: number;
+        ReadyForPaymentAmount: number;
+    };
+}
+
+interface PoData {
+    id: number;
+    Title: string;
+    PerformedBy: string
+    Cost: number;
+    Paid: string;
+}
+
+interface billData {
+    id: number;
+    BillTitle: string;
+    PayTo: string
+    BillAmount: number;
+    BillStatus: string;
+}
+
+interface ModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    poData: PoData[];
+}
+
+
+
 export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null }) {
 
     const [bi, setBi] = useState([])
     const [po, setPo] = useState([])
+    const [poData, setPoData] = useState<PoData[]>([]);
+    const [billData, setbillData] = useState<billData[]>([]);  // Estado para almacenar los datos de las PO
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpenb, setIsModalOpenb] = useState(false);
 
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const response = await fetch('https://constructapi.vercel.app/bills');
+                const response = await fetch('http://localhost:3001/bills');
                 const databills = await response.json();
                 setBi(databills);
             } catch (error) {
                 console.error('Error al obtener los bills:', error);
             }
             try {
-                const response = await fetch('https://constructapi.vercel.app/po');
+                const response = await fetch('http://localhost:3001/po');
                 const datapo = await response.json();
                 setPo(datapo);
             } catch (error) {
@@ -100,85 +149,59 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
     }
 
     const bil: Billsexcel[] = bi
-    const billxpaytoxjobPaid = bil?.reduce<PayToResult>((result, bill: Billsexcel) => {
-        // Iteramos sobre los trabajos a analizar
-        if (bill.Job === selectedJob?.Name && bill.BillStatus === "Paid") {
-            const { PayTo, Job, BillAmount } = bill;
-            result[PayTo] = result[PayTo] || {};
-            result[PayTo][Job] = (result[PayTo][Job] || 0) + BillAmount;
+    function calculateTotalsByStatus(bills: Billsexcel[], selectedJob: Jobsexcel | null, status: string): PayToResult {
+        return bills.reduce<PayToResult>((result, bill) => {
+            if (bill.Job === selectedJob?.Name && bill.BillStatus === status) {
+                const { PayTo, Job, BillAmount } = bill;
+                result[PayTo] = result[PayTo] || {};
+                result[PayTo][Job] = (result[PayTo][Job] || 0) + BillAmount;
+            }
+            return result;
+        }, {});
+    }
 
+    const billxpaytoxjobPaid = calculateTotalsByStatus(bil, selectedJob, 'Paid');
+    const billxpaytoxjobReady = calculateTotalsByStatus(bil, selectedJob, 'Ready For Payment');
+
+    const calculatePOData = (pos: posexcel[], selectedJob: Jobsexcel | null, paidStatus: string): PayToResult2 => {
+        return pos?.reduce<PayToResult2>((result, p) => {
+            if (p.Job === selectedJob?.Name && p.Paid === paidStatus) {
+                const { PerformedBy, Job, Cost } = p;
+                result[PerformedBy] = result[PerformedBy] || { Jobs: [], TotalCost: 0 };
+                result[PerformedBy].Jobs.push(Job);
+                result[PerformedBy].TotalCost += Cost;
+            }
+            return result;
+        }, {} as PayToResult2);
+    };
+ 
+
+    const handleVendorClick = async (vendorData: { PerformedBy: string; Job: string; }) => {
+        try {
+            const response = await fetch(`http://localhost:3001/po?PerformedBy=${encodeURIComponent(vendorData.PerformedBy)}&Job=${encodeURIComponent(vendorData.Job)}`);
+            const newPoData = await response.json();
+            setPoData(newPoData);
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
-        return result;
-    }, {});
+    };
 
-    // ready for payment
-    const billxpaytoxjobReady = bil?.reduce<PayToResult>((result, bill: Billsexcel) => {
-        // Iteramos sobre los trabajos a analizar
-        if (bill.Job === selectedJob?.Name && bill.BillStatus === "Ready For Payment") {
-            const { PayTo, Job, BillAmount } = bill;
-            result[PayTo] = result[PayTo] || {};
-            result[PayTo][Job] = (result[PayTo][Job] || 0) + BillAmount;
-
+    const handlePayToClick = async (vendorData: { PayTo: string; Job: string; }) => {
+        try {
+            const response = await fetch(`http://localhost:3001/bills?PayTo=${encodeURIComponent(vendorData.PayTo)}&Job=${encodeURIComponent(vendorData.Job)}`);
+            const newbillData = await response.json();
+            setbillData(newbillData);
+            setIsModalOpenb(true);
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
-        return result;
-    }, {});
-
-    // Open - Requested
-    // const billxpaytoxjobOpen = bil?.reduce<PayToResult>((result, bill:Billsexcel) => {
-    //     // Iteramos sobre los trabajos a analizar
-    //     if (bill.Job === selectedJob?.Name && bill.BillStatus === "Open - Requested") {
-    //         const { PayTo, Job, BillAmount } = bill;
-    //         result[PayTo] = result[PayTo] || {};
-    //         result[PayTo][Job] = (result[PayTo][Job] || 0) + BillAmount;
-
-    //       }
-    //       return result;
-    //   }, {});
-
-    // Purchase order not paid
-    const pos: posexcel[] = po
-    const poxPerformedbyxJobNotPaid = pos?.reduce<PayToResult>((result, p: posexcel) => {
-        // Iteramos sobre los trabajos a analizar
-        if (p.Job === selectedJob?.Name && p.Paid === "Not Paid") {
-            const { PerformedBy, Job, Cost } = p;
-            result[PerformedBy] = result[PerformedBy] || {};
-            result[PerformedBy][Job] = (result[PerformedBy][Job] || 0) + Cost;
-
-        }
-        return result;
-    }, {});
-
-    // Purchase order Partially Paid
-
-    const poxPerformedbyxJobNotPartially = pos?.reduce<PayToResult>((result, p: posexcel) => {
-        // Iteramos sobre los trabajos a analizar
-        if (p.Job === selectedJob?.Name && p.Paid === "Partially Paid") {
-            const { PerformedBy, Job, Cost } = p;
-            result[PerformedBy] = result[PerformedBy] || {};
-            result[PerformedBy][Job] = (result[PerformedBy][Job] || 0) + Cost;
-
-        }
-        return result;
-    }, {});
+    };
 
 
-    // Purchase order Fully Paid
-
-    const poxPerformedbyxJobNotFully = pos?.reduce<PayToResult>((result, p: posexcel) => {
-        // Iteramos sobre los trabajos a analizar
-        if (p.Job === selectedJob?.Name && p.Paid === "Fully Paid") {
-            const { PerformedBy, Job, Cost } = p;
-            result[PerformedBy] = result[PerformedBy] || {};
-            result[PerformedBy][Job] = (result[PerformedBy][Job] || 0) + Cost;
-
-        }
-        return result;
-    }, {});
-
-
-
-
-
+    const poxPerformedbyxJobNotPaid = calculatePOData(po, selectedJob, "Not Paid");
+    const poxPerformedbyxJobNotPartially = calculatePOData(po, selectedJob, "Partially Paid");
+    const poxPerformedbyxJobNotFully = calculatePOData(po, selectedJob, "Fully Paid");
     return (
 
         <>
@@ -221,6 +244,7 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
 
                             <div className='bill'>
                                 <div className="title">Bills:</div>
+
                                 {Object.keys(billxpaytoxjobPaid).length > 0 && (
                                     <table className='table table-hover table-striped mt-3 text-black-50'>
                                         <thead>
@@ -231,21 +255,22 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {billxpaytoxjobPaid &&
-                                                Object.keys(billxpaytoxjobPaid).map(vendor => (
-                                                    <tr key={vendor}>
-                                                        <td>{vendor}</td>
-                                                        <td>{formatNumber(billxpaytoxjobPaid[vendor][Object.keys(billxpaytoxjobPaid[vendor])[0]])} </td>
-                                                        <td>Paid</td>
-                                                    </tr>
-                                                ))}
+                                            {Object.entries(billxpaytoxjobPaid).map(([vendor, amounts]) => (
+                                                <tr key={vendor} onClick={() => handlePayToClick({ PayTo: vendor , Job: selectedJob?.Name || '' })}>
+                                                    <td>{vendor}</td>
+                                                    <td>{formatNumber(amounts[Object.keys(amounts)[0]])}</td>
+                                                    <td>Paid</td>
+                                                </tr>
+                                            ))}
                                             <tr>
                                                 <td className='bold'>Total</td>
-                                                <td className='bold'>{billxpaytoxjobPaid &&
-                                                    formatNumber(Object.values(billxpaytoxjobPaid)
-                                                        .map(obj => Object.values(obj)[0])
-                                                        .reduce((total, amount) => total + amount, 0)
-                                                    )}</td>
+                                                <td className='bold'>
+                                                    {formatNumber(
+                                                        Object.values(billxpaytoxjobPaid)
+                                                            .map((amounts) => amounts[Object.keys(amounts)[0]])
+                                                            .reduce((total, amount) => total + amount, 0)
+                                                    )}
+                                                </td>
                                                 <td className='bold'>Paid</td>
                                             </tr>
                                         </tbody>
@@ -254,134 +279,141 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                                 {/* Ready for paid */}
                                 <hr />
                                 {Object.keys(billxpaytoxjobReady).length > 0 && (
-                                <table className='table table-hover table-striped mt-3 text-black-50'>
-                                    <thead>
-                                        <tr>
-                                            <th>Vendor</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {billxpaytoxjobReady &&
-                                            Object.keys(billxpaytoxjobReady)?.map(vendor => (
-                                                <tr key={vendor}>
-                                                    <td>{vendor}</td>
-                                                    <td>{formatNumber(billxpaytoxjobReady[vendor][Object.keys(billxpaytoxjobReady[vendor])[0]])} </td>
-                                                    <td>Ready For Payment</td>
-                                                </tr>
-                                            ))}
-                                        <tr>
-                                            <td className='bold'>Total</td>
-                                            <td className='bold'>{billxpaytoxjobReady &&
-                                                formatNumber(Object.values(billxpaytoxjobReady)
-                                                    .map(obj => Object.values(obj)[0])
-                                                    .reduce((total, amount) => total + amount, 0)
-                                                )}</td>
-                                            <td className='bold'>Ready For Payment</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table className='table table-hover table-striped mt-3 text-black-50'>
+                                        <thead>
+                                            <tr>
+                                                <th>Vendor</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {billxpaytoxjobReady &&
+                                                Object.entries(billxpaytoxjobReady).map(([vendor, amounts]) => (
+                                                    <tr key={vendor} onClick={() => handlePayToClick({ PayTo: vendor , Job: selectedJob?.Name || '' })}>
+                                                        <td>{vendor}</td>
+                                                        <td>{formatNumber(amounts[Object.keys(amounts)[0]])}</td>
+                                                        <td>Paid</td>
+                                                    </tr>
+                                                ))}
+                                            <tr>
+                                                <td className='bold'>Total</td>
+                                                <td className='bold'>
+                                                    {formatNumber(
+                                                        Object.values(billxpaytoxjobReady)
+                                                            .map((amounts) => amounts[Object.keys(amounts)[0]])
+                                                            .reduce((total, amount) => total + amount, 0)
+                                                    )}
+                                                </td>
+                                                <td className='bold'>Ready For Payment</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 )}
                                 <hr />
                             </div>
                             <div className='bill'>
                                 <div className="title">Purchase order:</div>
                                 {Object.keys(poxPerformedbyxJobNotPaid).length > 0 && (
-                                <table className='table table-hover table-striped mt-3 text-black-50'>
-                                    <thead>
-                                        <tr>
-                                            <th>Perfomed by </th>
-                                            <th>Cost</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {poxPerformedbyxJobNotPaid &&
-                                            Object.keys(poxPerformedbyxJobNotPaid).map(vendor => (
-                                                <tr key={vendor}>
+                                    <table className='table table-hover table-striped mt-3 text-black-50'>
+                                        <thead>
+                                            <tr>
+                                                <th>Vendor</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Object.entries(poxPerformedbyxJobNotPaid).map(([vendor, { TotalCost }]) => (
+                                                <tr key={vendor} onClick={() => handleVendorClick({ PerformedBy: vendor, Job: selectedJob?.Name || '' })}>
                                                     <td>{vendor}</td>
-                                                    <td>{formatNumber(poxPerformedbyxJobNotPaid[vendor][Object.keys(poxPerformedbyxJobNotPaid[vendor])[0]])} </td>
+                                                    <td>{formatNumber(TotalCost)}</td>
                                                     <td>Not Paid</td>
+                                                    {/* <td colSpan={3}>
+                                                        <button className='h-10 px-4 font-medium text-sm rounded-md text-white bg-gray-900' onClick={() => handleVendorClick({ PerformedBy: vendor, Job: selectedJob?.Name || '' })}>Ver Detalles</button>
+                                                    </td> */}
                                                 </tr>
                                             ))}
-                                        <tr>
-                                            <td className='bold'>Total</td>
-                                            <td className='bold'>{poxPerformedbyxJobNotPaid &&
-                                                formatNumber(Object.values(poxPerformedbyxJobNotPaid)
-                                                    .map(obj => Object.values(obj)[0])
-                                                    .reduce((total, amount) => total + amount, 0)
-                                                )}</td>
-                                            <td className='bold'>Not Paid</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                            <tr>
+                                                <td className='bold'>Total</td>
+                                                <td className='bold'>
+                                                    {formatNumber(
+                                                        Object.values(poxPerformedbyxJobNotPaid)
+                                                            .reduce((total, { TotalCost }) => total + TotalCost, 0)
+                                                    )}
+                                                </td>
+                                                <td className='bold'>Not Paid</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 )}
+                                
+
                                 {/* partially paid */}
                                 <hr />
                                 {Object.keys(poxPerformedbyxJobNotPartially).length > 0 && (
-
-                                <table className='table table-hover table-striped mt-3 text-black-50'>
-                                    <thead>
-                                        <tr>
-                                            <th>Perfomed by </th>
-                                            <th>Cost</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {poxPerformedbyxJobNotPartially &&
-                                            Object.keys(poxPerformedbyxJobNotPartially).map(vendor => (
-                                                <tr key={vendor}>
-                                                    <td>{vendor}</td>
-                                                    <td>{formatNumber(poxPerformedbyxJobNotPartially[vendor][Object.keys(poxPerformedbyxJobNotPartially[vendor])[0]])} </td>
-                                                    <td>Partially Paid</td>
-                                                </tr>
-                                            ))}
-                                        <tr>
-                                            <td className='bold'>Total</td>
-                                            <td className='bold'>{poxPerformedbyxJobNotPartially &&
-                                                formatNumber(Object.values(poxPerformedbyxJobNotPartially)
-                                                    .map(obj => Object.values(obj)[0])
-                                                    .reduce((total, amount) => total + amount, 0)
-                                                )}</td>
-                                            <td className='bold'>Partially Paid</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table className='table table-hover table-striped mt-3 text-black-50'>
+                                        <thead>
+                                            <tr>
+                                                <th>Vendor</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {poxPerformedbyxJobNotPartially &&
+                                                Object.entries(poxPerformedbyxJobNotPartially).map(([vendor, { TotalCost }]) => (
+                                                    <tr key={vendor} onClick={() => handleVendorClick({ PerformedBy: vendor, Job: selectedJob?.Name || '' })}>
+                                                        <td>{vendor}</td>
+                                                        <td>{formatNumber(TotalCost)}</td>
+                                                        <td>Partially Paid</td>
+                                                    </tr>
+                                                ))}
+                                            <tr>
+                                                <td className='bold'>Total</td>
+                                                <td className='bold'>
+                                                    {formatNumber(
+                                                        Object.values(poxPerformedbyxJobNotPartially)
+                                                            .reduce((total, { TotalCost }) => total + TotalCost, 0)
+                                                    )}
+                                                </td>
+                                                <td className='bold'>Partially Paid</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 )}
                                 {/* Fully paid */}
                                 <hr />
                                 {Object.keys(poxPerformedbyxJobNotFully).length > 0 && (
-
-                                <table className='table table-hover table-striped mt-3 text-black-50'>
-                                    <thead>
-                                        <tr>
-                                            <th>Perfomed by </th>
-                                            <th>Cost</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {poxPerformedbyxJobNotFully &&
-                                            Object.keys(poxPerformedbyxJobNotFully).map(vendor => (
-                                                <tr key={vendor}>
-                                                    <td>{vendor}</td>
-                                                    <td>{formatNumber(poxPerformedbyxJobNotFully[vendor][Object.keys(poxPerformedbyxJobNotFully[vendor])[0]])} </td>
-                                                    <td>Fully Paid</td>
-                                                </tr>
-                                            ))}
-                                        <tr>
-                                            <td className='bold'>Total</td>
-                                            <td className='bold'>{poxPerformedbyxJobNotFully &&
-                                                formatNumber(Object.values(poxPerformedbyxJobNotFully)
-                                                    .map(obj => Object.values(obj)[0])
-                                                    .reduce((total, amount) => total + amount, 0)
-                                                )}</td>
-                                            <td className='bold'>Fully Paid</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table className='table table-hover table-striped mt-3 text-black-50'>
+                                        <thead>
+                                            <tr>
+                                                <th>Vendor</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {poxPerformedbyxJobNotFully &&
+                                                Object.entries(poxPerformedbyxJobNotFully).map(([vendor, { TotalCost }]) => (
+                                                    <tr key={vendor} onClick={() => handleVendorClick({ PerformedBy: vendor, Job: selectedJob?.Name || '' })}>
+                                                        <td>{vendor}</td>
+                                                        <td>{formatNumber(TotalCost)}</td>
+                                                        <td>Fully Paid</td>
+                                                    </tr>
+                                                ))}
+                                            <tr>
+                                                <td className='bold'>Total</td>
+                                                <td className='bold'>
+                                                    {formatNumber(
+                                                        Object.values(poxPerformedbyxJobNotFully)
+                                                            .reduce((total, { TotalCost }) => total + TotalCost, 0)
+                                                    )}
+                                                </td>
+                                                <td className='bold'>Fully Paid</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 )}
                             </div>
                         </div>
@@ -389,6 +421,8 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                 </div>
             </div>
 
+                <Modalpo isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} poData={poData} />
+                <Modalbill isOpen={isModalOpenb} onClose={() => setIsModalOpenb(false)} billData={billData} />
         </>
     )
 }

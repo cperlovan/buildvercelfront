@@ -4,7 +4,7 @@ import "../../app/globals.css";
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import Header from '../Components/Header';
-import Footer from "../Components/Footer";
+//import Footer from "../Components/Footer";
 
 interface Jobsexcel {
   id:number;
@@ -32,7 +32,7 @@ export default function Page() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch('https://constructapi.vercel.app/jobs');
+        const response = await fetch('http://localhost:3001/jobs');
         const data = await response.json();
 
         // Handle potential errors in the fetched data
@@ -79,7 +79,7 @@ export default function Page() {
       
       <hr />
       <Card selectedJob={selectedJob} />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
