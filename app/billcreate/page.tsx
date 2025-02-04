@@ -136,7 +136,7 @@ function Page() {
   };
 
 
-  const sendDataInBatches = async (data: string | any[], batchSize: number) => {
+  const sendDataInBatches = async (data: Jobsexcel[], batchSize: number) => {
     for (let i = 0; i < data.length; i += batchSize) {
       const batch = data.slice(i, i + batchSize);
       console.log(`Enviando batch ${i / batchSize + 1} con ${batch.length} registros.`);
