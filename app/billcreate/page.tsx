@@ -20,11 +20,11 @@ interface Jobsexcel {
   PayTo: string | undefined;
   BillAmount: string | number | null | undefined;
   InvoiceDate: string | null | undefined;
-  DueDate: string | null |  undefined;
+  DueDate: string | null | undefined;
   BillStatus: string | undefined;
   DatePaid: string | null | undefined;
   PaidBy: string | undefined;
-  CreatedDate: string | null |undefined;
+  CreatedDate: string | null | undefined;
   Files: string | undefined;
   Comments: string | undefined;
   VarianceCodes: string | undefined;
@@ -121,7 +121,7 @@ function Page() {
           });
           return processRow(excelRow);
         });
-        
+
         setData(dataRows);
         setFileDataLoaded(true);
       } catch (error) {
@@ -256,17 +256,24 @@ function Page() {
   }
 
   return (
-    <div>
+    <div className='w-full mx-auto px-4'>
       <Header />
-      <div className="table-responsive">
-        <div className='mb-3 ml-4'>
-          <label htmlFor="formFile" className="form-label">Choose file</label>
-          <input className='form-control' type="file" id="formFile" onChange={handleFileChange} />
+      <div className="table-responsive rounded-sm bg-gray-2">
+        <div className='mb-3'>
+          <label className="mb-3 block text-sm font-bold text-black dark:text-white ml-2">Choose file</label>
+          <input className='w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:px-5 file:py-3 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary'
+            type="file"
+            id="formFile"
+            onChange={handleFileChange} />
         </div>
         {isLoading && <p>Loading data...</p>}
         {error && <p className="error">{error}</p>}
-        <form className='form-control' onSubmit={handleSubmit}>
-          <button className="btn btn-secondary" disabled={isLoading} style={{ fontSize: 'small', marginLeft: '5px' }} >Save BILLS to database</button>
+        <form className='bg-gray-100 p-4 rounded-md shadow-sm mt-3' onSubmit={handleSubmit}>
+          <button className="flex w-full items-center text-white justify-start gap-3.5 rounded-lg border border-stroke bg-gray-800 p-4 hover:bg-gray-900 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50 "
+            disabled={isLoading}
+            style={{ fontSize: 'small', marginLeft: '5px' }} >
+            Save BILLS to database
+          </button>
 
           {data.length > 0 && fileDataLoaded && (
             <table id="Datatable" className="table table-hover fs-6 table-striped mt-3">
