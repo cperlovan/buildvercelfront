@@ -30,7 +30,8 @@ interface Jobsexcel {
   VarianceCodes: string | undefined;
   CostCodes: string[] | string | undefined;
   RelatedPOs: string | undefined;
-  LienWaivers: undefined | string; // Se maneja como array o undefined
+  LienWaivers: undefined | string;
+  [key: string]: string | number | string[] | null | undefined; // Firma de índice
 }
 
 interface ExcelRow {
@@ -59,7 +60,7 @@ function Page() {
   const [error, setError] = useState("");
   const [formattedData, setFormattedData] = useState<Jobsexcel[]>([]);
   const [fileDataLoaded, setFileDataLoaded] = useState(false);
-
+   
   useEffect(() => {
     if (data && data.length > 0) {
       const processedData: Jobsexcel[] = data.map((row) => processRow(row as ExcelRow));
@@ -67,34 +68,50 @@ function Page() {
     }
   }, [data]);
 
+  function excelDateToJSDate(excelDate: number): Date {
+    const unixTimestamp = (excelDate - 25569) * 86400 * 1000;
+    return new Date(unixTimestamp);
+}
+
   function processRow(row: ExcelRow): Jobsexcel {
     let CostCodes: string | number | string[] | undefined = row.CostCodes;
 
     if (typeof CostCodes === 'string') {
-      CostCodes = CostCodes.split('|').map((item) => item.trim());
+        CostCodes = CostCodes.split('|').map((item) => item.trim());
     } else if (typeof CostCodes === 'number') {
-      CostCodes = [CostCodes];
+        CostCodes = [CostCodes];
     } else if (!Array.isArray(CostCodes)) {
-      CostCodes = [];
+        CostCodes = [];
     }
 
     const formattedRow: Jobsexcel = { ...row, CostCodes: CostCodes };
 
-    // Convertir fechas de número a MM/DD/YYYY si es necesario
     const dateFields: (keyof Jobsexcel)[] = ["InvoiceDate", "DueDate", "DatePaid", "CreatedDate"];
     dateFields.forEach((field) => {
-      const value = formattedRow[field];
+        const value = formattedRow[field];
 
-      if (typeof value === "number") {
-        formattedRow[field] = moment("1900-01-01").add(value - 2, "days").format("MM/DD/YYYY");
-      } else if (typeof value === "string" && !isNaN(Number(value))) {
-        formattedRow[field] = moment("1900-01-01").add(Number(value) - 2, "days").format("MM/DD/YYYY");
-      }
+        if (typeof value === "number") { // Fechas numéricas (Excel)
+            const jsDate = excelDateToJSDate(value);
+            formattedRow[field] = moment(jsDate).format("YYYY-MM-DD");
+        } else if (typeof value === "string") {
+            if (value === "-" || value === "") { // Valores "-" o vacíos
+                formattedRow[field] = null;
+            } else {
+                const momentDate = moment(value, ["YYYY-MM-DD", "MM/DD/YYYY"], true); // Prueba ambos formatos
+                if (momentDate.isValid()) {
+                    formattedRow[field] = momentDate.format("YYYY-MM-DD");
+                } else {
+                    console.error(`Fecha inválida para ${field}: ${value}`);
+                    formattedRow[field] = null;
+                }
+            }
+        } else {
+            formattedRow[field] = null; // Otros valores (undefined, null)
+        }
     });
 
     return formattedRow;
-  }
-
+}
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -102,6 +119,7 @@ function Page() {
 
     setIsLoading(true);
     setError("");
+    
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -113,6 +131,9 @@ function Page() {
 
         const jsonData: (string | undefined)[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         const headers: string[] = jsonData[0] as string[];
+    
+        console.log("Datos extraídos del Excel (jsonData):", jsonData);
+        console.log("Encabezados del Excel (headers):", headers);
 
         const dataRows: Jobsexcel[] = jsonData.slice(1).map((row: (string | undefined)[]) => {
           const excelRow: ExcelRow = {} as ExcelRow;
@@ -139,13 +160,14 @@ function Page() {
   const sendDataInBatches = async (data: Jobsexcel[], batchSize: number) => {
     for (let i = 0; i < data.length; i += batchSize) {
       const batch = data.slice(i, i + batchSize);
-      console.log(`Enviando batch ${i / batchSize + 1} con ${batch.length} registros.`);
+      //console.log(`Enviando batch ${i / batchSize + 1} con ${batch.length} registros.`);
 
       // 🔹 Verifica los datos antes de enviarlos
-      console.log("Contenido del batch:", JSON.stringify(batch, null, 2));
+      //console.log("Contenido del batch:", JSON.stringify(batch, null, 2));
 
       try {
-        const response = await fetch('https://constructapi.vercel.app/bills', {
+         const response = await fetch('https://constructapi.vercel.app/bills', {
+         // const response = await fetch('http://localhost:3030/bills', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(batch),
@@ -174,53 +196,13 @@ function Page() {
 
     setIsLoading(true);
 
-    // Procesar datos y formatear fechas
-    const processedData = data.map((row) => {
-      let CostCodes = row.CostCodes;
-
-      if (typeof CostCodes === 'string') {
-        CostCodes = CostCodes.split('|').map((item: string) => item.trim());
-      } else if (typeof CostCodes === 'number') {
-        CostCodes = [CostCodes];
-      } else if (!Array.isArray(CostCodes)) {
-        CostCodes = [];
-      }
-
-      const formattedRow = { ...row };
-
-      if (formattedRow.InvoiceDate && moment(formattedRow.InvoiceDate, "YYYY-MM-DD", true).isValid()) {
-        formattedRow.InvoiceDate = moment(formattedRow.InvoiceDate).format('YYYY-MM-DD');
-      } else {
-        formattedRow.InvoiceDate = null; // O enviar un valor por defecto si la fecha no es válida
-      }
-      if (formattedRow.DueDate && moment(formattedRow.DueDate, "YYYY-MM-DD", true).isValid()) {
-        formattedRow.DueDate = moment(formattedRow.DueDate).format('YYYY-MM-DD');
-      } else {
-        formattedRow.DueDate = null; // O enviar un valor por defecto si la fecha no es válida
-      }
-      if (formattedRow.DatePaid && moment(formattedRow.DatePaid, "YYYY-MM-DD", true).isValid()) {
-        formattedRow.DatePaid = moment(formattedRow.DatePaid).format('YYYY-MM-DD');
-      } else {
-        formattedRow.DatePaid = null; // O enviar un valor por defecto si la fecha no es válida
-      }
-      if (formattedRow.CreatedDate && moment(formattedRow.CreatedDate, "YYYY-MM-DD", true).isValid()) {
-        formattedRow.CreatedDate = moment(formattedRow.CreatedDate).format('YYYY-MM-DD');
-      } else {
-        formattedRow.CreatedDate = null; // O enviar un valor por defecto si la fecha no es válida
-      }
-
-      return formattedRow;
-    });
-
-    // console.log("Datos formateados antes de enviar:", JSON.stringify(processedData, null, 2));
-
-    setFormattedData(processedData);
+  
 
     await deleteTableData();
 
     // Enviar los datos en lotes
     const batchSize = 200;
-    const success = await sendDataInBatches(processedData, batchSize);
+    const success = await sendDataInBatches(formattedData, batchSize);
 
     setIsLoading(false);
 
@@ -240,6 +222,7 @@ function Page() {
     async function deleteTableData() {
       try {
         const response = await fetch('https://constructapi.vercel.app/bills/delete', {
+        //  const response = await fetch('http://localhost:3030/bills/delete', {
           method: 'PUT',
         });
 
