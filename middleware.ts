@@ -5,10 +5,10 @@ import { jwtVerify } from 'jose';
 const secret = new TextEncoder().encode(process.env.JWT_SECRET || '');
 
 export async function middleware(req: NextRequest) {
-  //console.log("✅ Middleware ejecutándose para la ruta:", req.nextUrl.pathname);
+  console.log("✅ Middleware ejecutándose para la ruta:", req.nextUrl.pathname);
 
   const tokenCookie = req.cookies.get('token');
- // console.log("🔹 Token recibido:", tokenCookie?.value);
+  console.log("🔹 Token recibido:", tokenCookie?.value);
 
   if (!tokenCookie || !tokenCookie.value) {
     console.log("❌ No hay token, redirigiendo a /login");
@@ -54,6 +54,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [ ],
+  matcher: ['/home', '/billcreate', '/pocreate', '/jobcreate', '/billquery', '/poquery', '/jobquery', ],
 };
-//'/home', '/billcreate', '/pocreate', '/jobcreate', '/billquery', '/poquery', '/jobquery',
