@@ -44,7 +44,7 @@ export default function Login() {
       }
   
       // Si el usuario está autorizado, guardar el token y redirigir
-      document.cookie = `token=${data.token}; Path=/; Secure; SameSite=Strict`;
+      document.cookie = `token=${data.token}; Path=/; Secure; SameSite=Lax`;
       router.push("/home");
       setUsername("");
       setPassword("");
