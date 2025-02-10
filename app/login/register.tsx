@@ -35,7 +35,8 @@ export default function Register({ setShowRegister }: RegisterProps) {
 
       alert("Registro exitoso. Ahora puedes iniciar sesión.");
       setShowRegister(false);
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
       setError("Error al registrarse");
     }
   };

@@ -48,7 +48,8 @@ export default function Login() {
       router.push("/home");
       setUsername("");
       setPassword("");
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
       setError("Error al iniciar sesión");
     }
   };
@@ -95,7 +96,7 @@ export default function Login() {
               </button>
             </form>
             <p className="text-sm text-center mt-4">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
               <button
                 onClick={() => setShowRegister(true)}
                 className="text-blue-500 hover:underline"
