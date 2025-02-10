@@ -35,7 +35,7 @@ export default function Register({ setShowRegister }: RegisterProps) {
 
       alert("Registro exitoso. Ahora puedes iniciar sesión.");
       setShowRegister(false);
-    } catch (error) {
+    } catch (e) {
       setError("Error al registrarse");
     }
   };

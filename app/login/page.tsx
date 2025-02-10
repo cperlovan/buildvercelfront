@@ -37,7 +37,7 @@ export default function Login() {
   
       const data = await response.json() as { user: User; token: string };
   
-      // 📌 Verificar si el usuario está autorizado
+      //  Verificar si el usuario está autorizado
       if (!data.user.authorized) {
         setError("Tu cuenta está bloqueada. Contacta al administrador.");
         return;
@@ -48,7 +48,7 @@ export default function Login() {
       router.push("/home");
       setUsername("");
       setPassword("");
-    } catch (error) {
+    } catch (e) {
       setError("Error al iniciar sesión");
     }
   };

@@ -66,7 +66,7 @@ function Page() {
       const processedData: Jobsexcel[] = data.map((row) => processRow(row as ExcelRow));
       setFormattedData(processedData);
     }
-  }, [data]);
+  }, [data, processRow]);
 
   function excelDateToJSDate(excelDate: number): Date {
     const unixTimestamp = (excelDate - 25569) * 86400 * 1000;
