@@ -54,5 +54,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/home', '/billcreate', '/pocreate', '/jobcreate', '/billquery', '/poquery', '/jobquery', ],
+  matcher: ['/','/home', '/billcreate', '/pocreate', '/jobcreate', '/billquery', '/poquery', '/jobquery', ],
 };
