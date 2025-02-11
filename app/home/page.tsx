@@ -2,22 +2,28 @@
 
 import Image from "next/image";
 import Header from "../Components/Header";
-import center from "../../public/assets/image/construction.jpg"
+import center from "../../public/assets/image/construction.jpg";
 import Footer from "../Components/Footer";
 
-export default function page() {
+export default function Page() {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
+     
       <Header />
-      <div>
+
+      {/* Imagen de fondo */}
+      <div className="flex-1 relative w-full h-[calc(100vh-80px)]">
         <Image
-          className="imacentral"
-          src={center.src}
+          src={center}
           alt="center"
-          height={600}
-          width={1700}
+          layout="fill"
+          objectFit="cover" 
+          objectPosition="center" 
+          priority
         />
       </div>
+
+ 
       <Footer />
     </div>
   );
