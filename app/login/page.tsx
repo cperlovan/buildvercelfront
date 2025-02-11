@@ -62,6 +62,7 @@ export default function Login() {
           <Register setShowRegister={setShowRegister} />
         ) : (
           <>
+            <h3 className="text-2xl font-bold mb-4 text-center">Construction Monitoring</h3>
             <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
             <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
