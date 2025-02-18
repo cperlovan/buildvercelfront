@@ -27,7 +27,7 @@ function ProgressBar({ totalCost, jobRunningTotal }: ProgressBarProps) {
       <div className="progress">
         <div
           className={`progress-bar ${
-            progress > 80 ? 'bg-danger' :
+            progress > 85 ? 'bg-danger' :
             progress >= 70 ? 'bg-warning' :
             'bg-success'
           }`}
