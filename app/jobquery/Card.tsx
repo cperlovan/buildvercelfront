@@ -292,7 +292,7 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                                                     <tr key={vendor} onClick={() => handlePayToClick({ PayTo: vendor , Job: selectedJob?.Name || '' })}>
                                                         <td>{vendor}</td>
                                                         <td>{formatNumber(amounts[Object.keys(amounts)[0]])}</td>
-                                                        <td>Paid</td>
+                                                        <td>Ready For Payment</td>
                                                     </tr>
                                                 ))}
                                             <tr>
