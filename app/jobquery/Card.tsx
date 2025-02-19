@@ -197,7 +197,7 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
 
     const calculateRemainingAmount = () => {
         if (!selectedJob) return 0;
-        return selectedJob.JobRunningTotal - selectedJob.TotalCosts - selectedJob.CostsOutstanding;
+        return selectedJob.JobRunningTotal - (selectedJob.TotalCosts + selectedJob.CostsOutstanding);
     };
 
     const remainingAmount = calculateRemainingAmount();
@@ -241,7 +241,6 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
 
                                 <div className="App">
                                     <RemainingAmountBar
-                                        remainingAmount={remainingAmount}
                                         jobRunningTotal={selectedJob.JobRunningTotal}
                                         totalCosts={selectedJob.TotalCosts}
                                         costsOutstanding={selectedJob.CostsOutstanding}
