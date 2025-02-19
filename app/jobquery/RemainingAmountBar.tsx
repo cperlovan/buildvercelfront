@@ -13,19 +13,21 @@ const RemainingAmountBar: React.FC<RemainingAmountBarProps> = ({
 }) => {
     if (!jobRunningTotal) return null;
 
+    // Calcular el monto restante
     const remainingAmount = jobRunningTotal - (totalCosts + costsOutstanding);
-    const percentage = (remainingAmount / jobRunningTotal) * 100;
+
+    // El 70% del jobRunningTotal es el 100% de lo que se debe gastar
+    const maxSpending = jobRunningTotal * 0.7;
+
+    // Calcular el porcentaje basado en el maxSpending
+    const percentage = (remainingAmount / maxSpending) * 100;
 
     let barColor = 'bg-success'; // Valor predeterminado
 
-    if (percentage < 0) {
-        barColor = 'bg-danger'; // Si el monto restante es negativo, usa rojo
+    if (percentage < 25) {
+        barColor = 'bg-danger'; // Si el porcentaje es menor al 25%, usa rojo
     } else if (percentage < 30) {
-        barColor = 'bg-warning'; // Si el porcentaje es menor del 30%, usa amarillo
-    } else if (percentage > 85) {
-        barColor = 'bg-danger';
-    } else if (percentage >= 70) {
-        barColor = 'bg-warning';
+        barColor = 'bg-warning'; // Si el porcentaje es menor al 30%, usa amarillo
     }
 
     const formatNumber = (number: number | bigint) => {
@@ -36,9 +38,9 @@ const RemainingAmountBar: React.FC<RemainingAmountBarProps> = ({
         <div>
             <div className="progress">
                 <div
-                    className={`progress-bar ${barColor}`} // Usar la misma variable barColor
+                    className={`progress-bar ${barColor}`}
                     role="progressbar"
-                    style={{ width: `${Math.max(0, percentage)}%` }}
+                    style={{ width: `${Math.min(100, Math.max(0, percentage))}%` }}
                     aria-valuenow={percentage}
                 >
                     {formatNumber(remainingAmount)} ({percentage.toFixed(2)}%) remaining
