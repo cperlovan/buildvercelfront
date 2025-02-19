@@ -197,7 +197,7 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
     const poxPerformedbyxJobNotPartially = calculatePOData(po, selectedJob, "Partially Paid");
     const poxPerformedbyxJobNotFully = calculatePOData(po, selectedJob, "Fully Paid");
     
-    
+  
     
     return (
 
@@ -230,7 +230,8 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                                     <p className="div10" key={"CostsPaid"}> <strong>Costs Paid: </strong> <span>{formatNumber(selectedJob.CostsPaid)}</span> </p>
                                     <p className="div11" key={"TotalCosts"}> <strong>Total cost: </strong> <span>{formatNumber(selectedJob.TotalCosts)}</span> </p>
                                 </div>
-                              
+
+                            
                                 <div className="App">
                                     <ProgressBar totalCost={selectedJob.TotalCosts} jobRunningTotal={selectedJob.JobRunningTotal} />
                                 </div>

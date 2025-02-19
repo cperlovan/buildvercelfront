@@ -1,8 +1,7 @@
 "use client"
 import "../../app/globals.css";
-
 import './stylebills.css'
-import React, { useState, useEffect, useCallback  } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import * as XLSX from 'xlsx';
 import Header from '../Components/Header';
 import Swal from 'sweetalert2';
@@ -60,58 +59,58 @@ function Page() {
   const [error, setError] = useState("");
   const [formattedData, setFormattedData] = useState<Jobsexcel[]>([]);
   const [fileDataLoaded, setFileDataLoaded] = useState(false);
-   
+
+  const excelDateToJSDate = useCallback((excelDate: number): Date => {
+      const unixTimestamp = (excelDate - 25569) * 86400 * 1000;
+      return new Date(unixTimestamp);
+  }, []);
+
+  const processRow = useCallback((row: ExcelRow): Jobsexcel => {
+      let CostCodes: string | number | string[] | undefined = row.CostCodes;
+
+      if (typeof CostCodes === 'string') {
+          CostCodes = CostCodes.split('|').map((item) => item.trim());
+      } else if (typeof CostCodes === 'number') {
+          CostCodes = [CostCodes];
+      } else if (!Array.isArray(CostCodes)) {
+          CostCodes = [];
+      }
+
+      const formattedRow: Jobsexcel = { ...row, CostCodes: CostCodes };
+
+      const dateFields: (keyof Jobsexcel)[] = ["InvoiceDate", "DueDate", "DatePaid", "CreatedDate"];
+      dateFields.forEach((field) => {
+          const value = formattedRow[field];
+
+          if (typeof value === "number") { // Fechas numéricas (Excel)
+              const jsDate = excelDateToJSDate(value);
+              formattedRow[field] = moment(jsDate).format("YYYY-MM-DD");
+          } else if (typeof value === "string") {
+              if (value === "-" || value === "") { // Valores "-" o vacíos
+                  formattedRow[field] = null;
+              } else {
+                  const momentDate = moment(value, ["YYYY-MM-DD", "MM/DD/YYYY"], true); // Prueba ambos formatos
+                  if (momentDate.isValid()) {
+                      formattedRow[field] = momentDate.format("YYYY-MM-DD");
+                  } else {
+                      console.error(`Fecha inválida para ${field}: ${value}`);
+                      formattedRow[field] = null;
+                  }
+              }
+          } else {
+              formattedRow[field] = null; // Otros valores (undefined, null)
+          }
+      });
+
+      return formattedRow;
+  }, []); // Eliminado excelDateToJSDate de las dependencias
+
   useEffect(() => {
-    if (data && data.length > 0) {
-      const processedData: Jobsexcel[] = data.map((row) => processRow(row as ExcelRow));
-      setFormattedData(processedData);
-    }
+      if (data && data.length > 0) {
+          const processedData: Jobsexcel[] = data.map((row) => processRow(row as ExcelRow));
+          setFormattedData(processedData);
+      }
   }, [data, processRow]);
-
-  function excelDateToJSDate(excelDate: number): Date {
-    const unixTimestamp = (excelDate - 25569) * 86400 * 1000;
-    return new Date(unixTimestamp);
-}
-
-  function processRow(row: ExcelRow): Jobsexcel {
-    let CostCodes: string | number | string[] | undefined = row.CostCodes;
-
-    if (typeof CostCodes === 'string') {
-        CostCodes = CostCodes.split('|').map((item) => item.trim());
-    } else if (typeof CostCodes === 'number') {
-        CostCodes = [CostCodes];
-    } else if (!Array.isArray(CostCodes)) {
-        CostCodes = [];
-    }
-
-    const formattedRow: Jobsexcel = { ...row, CostCodes: CostCodes };
-
-    const dateFields: (keyof Jobsexcel)[] = ["InvoiceDate", "DueDate", "DatePaid", "CreatedDate"];
-    dateFields.forEach((field) => {
-        const value = formattedRow[field];
-
-        if (typeof value === "number") { // Fechas numéricas (Excel)
-            const jsDate = excelDateToJSDate(value);
-            formattedRow[field] = moment(jsDate).format("YYYY-MM-DD");
-        } else if (typeof value === "string") {
-            if (value === "-" || value === "") { // Valores "-" o vacíos
-                formattedRow[field] = null;
-            } else {
-                const momentDate = moment(value, ["YYYY-MM-DD", "MM/DD/YYYY"], true); // Prueba ambos formatos
-                if (momentDate.isValid()) {
-                    formattedRow[field] = momentDate.format("YYYY-MM-DD");
-                } else {
-                    console.error(`Fecha inválida para ${field}: ${value}`);
-                    formattedRow[field] = null;
-                }
-            }
-        } else {
-            formattedRow[field] = null; // Otros valores (undefined, null)
-        }
-    });
-
-    return formattedRow;
-}
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
