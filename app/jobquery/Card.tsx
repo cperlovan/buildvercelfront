@@ -7,6 +7,7 @@ import './stylejobquery.css'
 import ProgressBar from "./ProgressBar"
 import Modalpo from './Modalpo'
 import Modalbill from './Modalbill';
+import RemainingAmountBar from './RemainingAmountBar';
 
 
 
@@ -234,6 +235,14 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                             
                                 <div className="App">
                                     <ProgressBar totalCost={selectedJob.TotalCosts} jobRunningTotal={selectedJob.JobRunningTotal} />
+                                </div>
+
+                                <div className="App">
+                                    <RemainingAmountBar
+                                        jobRunningTotal={selectedJob.JobRunningTotal}
+                                        totalCosts={selectedJob.TotalCosts}
+                                        costsOutstanding={selectedJob.CostsOutstanding}
+                                    />
                                 </div>
 
                             </div>
