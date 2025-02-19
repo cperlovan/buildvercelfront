@@ -15,7 +15,11 @@ function ProgressBar({ totalCost, jobRunningTotal }: ProgressBarProps) {
 
   // Calcula el porcentaje de progreso al cargar el componente
   useEffect(() => {
-    const calculatedProgress = totalCost > 0 ? (totalCost / jobRunningTotal) * 100 : 0;
+    let calculatedProgress = 0
+    if(jobRunningTotal > 0){
+       calculatedProgress = totalCost > 0 ? (totalCost / jobRunningTotal) * 100 : 0;
+
+    }
     
     setProgress(calculatedProgress);
   }, [totalCost, jobRunningTotal]);
@@ -27,7 +31,7 @@ function ProgressBar({ totalCost, jobRunningTotal }: ProgressBarProps) {
       <div className="progress">
         <div
           className={`progress-bar ${
-            progress > 80 ? 'bg-danger' :
+            progress > 85 ? 'bg-danger' :
             progress >= 70 ? 'bg-warning' :
             'bg-success'
           }`}
