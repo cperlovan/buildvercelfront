@@ -2,7 +2,7 @@
 import "../../app/globals.css";
 
 import './stylebills.css'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback  } from 'react';
 import * as XLSX from 'xlsx';
 import Header from '../Components/Header';
 import Swal from 'sweetalert2';

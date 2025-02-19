@@ -7,7 +7,10 @@ import './stylejobquery.css'
 import ProgressBar from "./ProgressBar"
 import Modalpo from './Modalpo'
 import Modalbill from './Modalbill';
-import RemainingAmountBar from "./RemainingAmountBar";
+
+
+
+
 
 interface Jobsexcel {
     ContractPrice: number;
@@ -194,13 +197,6 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
     const poxPerformedbyxJobNotPartially = calculatePOData(po, selectedJob, "Partially Paid");
     const poxPerformedbyxJobNotFully = calculatePOData(po, selectedJob, "Fully Paid");
     
-
-    const calculateRemainingAmount = () => {
-        if (!selectedJob) return 0;
-        return selectedJob.JobRunningTotal - (selectedJob.TotalCosts + selectedJob.CostsOutstanding);
-    };
-
-    const remainingAmount = calculateRemainingAmount();
     
     
     return (
@@ -237,14 +233,6 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                               
                                 <div className="App">
                                     <ProgressBar totalCost={selectedJob.TotalCosts} jobRunningTotal={selectedJob.JobRunningTotal} />
-                                </div>
-
-                                <div className="App">
-                                    <RemainingAmountBar
-                                        jobRunningTotal={selectedJob.JobRunningTotal}
-                                        totalCosts={selectedJob.TotalCosts}
-                                        costsOutstanding={selectedJob.CostsOutstanding}
-                                    />
                                 </div>
 
                             </div>
@@ -303,7 +291,7 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                                                     <tr key={vendor} onClick={() => handlePayToClick({ PayTo: vendor , Job: selectedJob?.Name || '' })}>
                                                         <td>{vendor}</td>
                                                         <td>{formatNumber(amounts[Object.keys(amounts)[0]])}</td>
-                                                        <td>Ready For Payment</td>
+                                                        <td>Paid</td>
                                                     </tr>
                                                 ))}
                                             <tr>
