@@ -243,7 +243,7 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
                                     <RemainingAmountBar
                                         jobRunningTotal={selectedJob.JobRunningTotal}
                                         totalCosts={selectedJob.TotalCosts}
-                                        costsOutstanding={selectedJob.CostsOutstanding}
+                                       
                                     />
                                 </div>
 
