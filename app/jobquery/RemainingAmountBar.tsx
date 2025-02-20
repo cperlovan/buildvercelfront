@@ -3,13 +3,13 @@ import React from 'react';
 interface RemainingAmountBarProps {
     jobRunningTotal: number;
     totalCosts: number;
-    costsOutstanding: number;
+   
 }
 
 const RemainingAmountBar: React.FC<RemainingAmountBarProps> = ({
     jobRunningTotal,
     totalCosts,
-    costsOutstanding,
+    
 }) => {
     if (!jobRunningTotal) return null;
 
