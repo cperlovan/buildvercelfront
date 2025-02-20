@@ -9,6 +9,7 @@
     "lint": "next lint --max-warnings=0 || echo 'Linting errors ignored'"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.5.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "jose": "^5.9.6",
