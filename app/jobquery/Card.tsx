@@ -234,12 +234,12 @@ export default function Card({ selectedJob }: { selectedJob: Jobsexcel | null })
 
                             
                                 <div className="App">
-                                    <p className='titlebar'><strong>Payments executed</strong></p>
+                                    <p className='titlebar'>Payments executed</p>
                                     <ProgressBar totalCost={selectedJob.TotalCosts} jobRunningTotal={selectedJob.JobRunningTotal} />
                                 </div>
                                 <hr />
                                 <div className="App">
-                                    <p className='titlebar'><strong>Remaining profit</strong></p>
+                                    <p className='titlebar'>Remaining profit</p>
                                     <RemainingAmountBar
                                         jobRunningTotal={selectedJob.JobRunningTotal}
                                         totalCosts={selectedJob.TotalCosts}
