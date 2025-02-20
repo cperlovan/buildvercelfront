@@ -116,6 +116,12 @@
 
 }
 
+.infojob .titlebar {
+  font-size: 13px;
+  font-weight: 700;
+  
+}
+
 .div1 {
   grid-area: 1 / 1 / 2 / 2;
 }
