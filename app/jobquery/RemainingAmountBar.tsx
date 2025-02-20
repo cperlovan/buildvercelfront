@@ -14,7 +14,7 @@ const RemainingAmountBar: React.FC<RemainingAmountBarProps> = ({
     if (!jobRunningTotal) return null;
 
     // Calcular el monto restante
-    const remainingAmount = jobRunningTotal - (totalCosts + costsOutstanding);
+    const remainingAmount = jobRunningTotal - totalCosts;
 
     // El 70% del jobRunningTotal es el 100% de lo que se debe gastar
     const maxSpending = jobRunningTotal * 0.7;
